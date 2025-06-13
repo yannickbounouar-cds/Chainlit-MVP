@@ -1,0 +1,68 @@
+{
+  "family": "chainlit-app",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::YOUR_ACCOUNT_ID:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "chainlit-app",
+      "image": "YOUR_ECR_REPO_URI:latest",
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "AZURE_OPENAI_ENDPOINT",
+          "value": "https://platform-core-hackathon-ndtibpy.openai.azure.com"
+        },
+        {
+          "name": "AZURE_OPENAI_DEPLOYMENT",
+          "value": "openai-gpt4o-mini"
+        },
+        {
+          "name": "AZURE_OPENAI_API_VERSION",
+          "value": "2025-01-01-preview"
+        },
+        {
+          "name": "CHAINLIT_HOST",
+          "value": "0.0.0.0"
+        },
+        {
+          "name": "CHAINLIT_PORT",
+          "value": "8000"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "AZURE_OPENAI_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:YOUR_REGION:YOUR_ACCOUNT_ID:secret:azure-openai-api-key"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/chainlit-app",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8000/health || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ]
+}

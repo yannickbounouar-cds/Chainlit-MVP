@@ -1,0 +1,18 @@
+# Core dependencies
+chainlit
+openai>=1.86.0
+mcp[cli]==1.9.4
+
+
+# Environment management
+python-dotenv==1.0.0
+
+# AWS deployment dependencies
+boto3==1.35.36
+gunicorn==21.2.0
+
+# Development dependencies
+pytest==7.4.3
+pytest-asyncio==0.21.1
+black==23.11.0
+flake8==6.1.0

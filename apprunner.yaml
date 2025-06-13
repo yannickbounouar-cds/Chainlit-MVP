@@ -1,0 +1,27 @@
+version: 1.0
+runtime: docker
+build:
+  commands:
+    build:
+      - echo "Building Chainlit app with App Runner"
+      - docker build -t chainlit-app .
+run:
+  runtime-version: latest
+  command: chainlit run app.py --host 0.0.0.0 --port 8000
+  network:
+    port: 8000
+    env-vars:
+      - name: CHAINLIT_HOST
+        value: "0.0.0.0"
+      - name: CHAINLIT_PORT
+        value: "8000"
+      - name: AZURE_OPENAI_ENDPOINT
+        value: "https://platform-core-hackathon-ndtibpy.openai.azure.com"
+      - name: AZURE_OPENAI_DEPLOYMENT
+        value: "openai-gpt4o-mini"
+      - name: AZURE_OPENAI_API_VERSION
+        value: "2025-01-01-preview"
+  env-vars:
+    # Secrets will be configured via AWS Console or CLI
+    - name: AZURE_OPENAI_API_KEY
+      value: "will-be-set-via-aws-secrets"
