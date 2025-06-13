@@ -6,7 +6,7 @@
 set -e
 
 # Configuration
-AWS_REGION="us-east-1"
+AWS_REGION="ca-central-1"
 APP_RUNNER_SERVICE_NAME="chainlit-app"
 ECR_REPO_NAME="chainlit-app"
 AWS_PROFILE=""
